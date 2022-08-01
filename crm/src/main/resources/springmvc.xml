@@ -16,6 +16,7 @@
     <!--    添加包扫描-->
     <context:component-scan base-package="com.huoping.crm.web.controller"></context:component-scan>
     <context:component-scan base-package="com.huoping.crm.setting.web.controller"></context:component-scan>
+    <context:component-scan base-package="com.huoping.crm.workbench.controller"></context:component-scan>
     <!--添加spring的注解驱动-->
     <mvc:annotation-driven/>
     <!--    添加视图解析器-->

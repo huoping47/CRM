@@ -17,11 +17,11 @@
         <!--        配置mybatis核心配置文件-->
         <property name="configLocation" value="classpath:mybatis-config.xml"></property>
         <!--        实体类注册-->
-        <property name="typeAliasesPackage" value="com.huoping.crm.pojo"></property>
+        <property name="typeAliasesPackage" value="com.huoping.crm.setting.pojo"></property>
     </bean>
     <!--    注册数据访问层的mapper.xml的文件-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.huoping.crm.mapper"></property>
+        <property name="basePackage" value="com.huoping.crm.setting.mapper"></property>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
     </bean>
 </beans>
