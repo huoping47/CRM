@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huoping.crm.setting.mapper.UserMapper">
+
+    <resultMap type="com.huoping.crm.setting.pojo.User" id="TblUserMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="loginact" column="loginAct" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="loginpwd" column="loginPwd" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="expiretime" column="expireTime" jdbcType="VARCHAR"/>
+        <result property="lockstate" column="lockState" jdbcType="VARCHAR"/>
+        <result property="deptno" column="deptno" jdbcType="VARCHAR"/>
+        <result property="allowips" column="allowIps" jdbcType="VARCHAR"/>
+        <result property="createtime" column="createTime" jdbcType="VARCHAR"/>
+        <result property="createby" column="createBy" jdbcType="VARCHAR"/>
+        <result property="edittime" column="editTime" jdbcType="VARCHAR"/>
+        <result property="editby" column="editBy" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="AllData">
+        id
+        , loginAct,name,loginPwd,email,expireTime,lockState,deptno,allowIps,createTime,createBy,editTime,editBy
+    </sql>
+    <!--查询单个-->
+    <select id="queryById" resultMap="TblUserMap">
+        select id,
+               loginAct,
+               name,
+               loginPwd,
+               email,
+               expireTime,
+               lockState,
+               deptno,
+               allowIps,
+               createTime,
+               createBy,
+               editTime,
+               editBy
+        from tbl_user
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TblUserMap">
+        select
+        id, loginAct, name, loginPwd, email, expireTime, lockState, deptno, allowIps, createTime, createBy, editTime,
+        editBy
+        from tbl_user
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="loginact != null and loginact != ''">
+                and loginAct = #{loginact}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="loginpwd != null and loginpwd != ''">
+                and loginPwd = #{loginpwd}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="expiretime != null and expiretime != ''">
+                and expireTime = #{expiretime}
+            </if>
+            <if test="lockstate != null and lockstate != ''">
+                and lockState = #{lockstate}
+            </if>
+            <if test="deptno != null and deptno != ''">
+                and deptno = #{deptno}
+            </if>
+            <if test="allowips != null and allowips != ''">
+                and allowIps = #{allowips}
+            </if>
+            <if test="createtime != null and createtime != ''">
+                and createTime = #{createtime}
+            </if>
+            <if test="createby != null and createby != ''">
+                and createBy = #{createby}
+            </if>
+            <if test="edittime != null and edittime != ''">
+                and editTime = #{edittime}
+            </if>
+            <if test="editby != null and editby != ''">
+                and editBy = #{editby}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from tbl_user
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="loginact != null and loginact != ''">
+                and loginAct = #{loginact}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="loginpwd != null and loginpwd != ''">
+                and loginPwd = #{loginpwd}
+            </if>
+            <if test="email != null and email != ''">
+                and email = #{email}
+            </if>
+            <if test="expiretime != null and expiretime != ''">
+                and expireTime = #{expiretime}
+            </if>
+            <if test="lockstate != null and lockstate != ''">
+                and lockState = #{lockstate}
+            </if>
+            <if test="deptno != null and deptno != ''">
+                and deptno = #{deptno}
+            </if>
+            <if test="allowips != null and allowips != ''">
+                and allowIps = #{allowips}
+            </if>
+            <if test="createtime != null and createtime != ''">
+                and createTime = #{createtime}
+            </if>
+            <if test="createby != null and createby != ''">
+                and createBy = #{createby}
+            </if>
+            <if test="edittime != null and edittime != ''">
+                and editTime = #{edittime}
+            </if>
+            <if test="editby != null and editby != ''">
+                and editBy = #{editby}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into tbl_user(loginAct, name, loginPwd, email, expireTime, lockState, deptno, allowIps, createTime,
+                             createBy, editTime, editBy)
+        values (#{loginact}, #{name}, #{loginpwd}, #{email}, #{expiretime}, #{lockstate}, #{deptno}, #{allowips},
+                #{createtime}, #{createby}, #{edittime}, #{editby})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into tbl_user(loginAct, name, loginPwd, email, expireTime, lockState, deptno, allowIps, createTime,
+        createBy, editTime, editBy)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.loginact}, #{entity.name}, #{entity.loginpwd}, #{entity.email}, #{entity.expiretime},
+            #{entity.lockstate}, #{entity.deptno}, #{entity.allowips}, #{entity.createtime}, #{entity.createby},
+            #{entity.edittime}, #{entity.editby})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into tbl_user(loginAct, name, loginPwd, email, expireTime, lockState, deptno, allowIps, createTime,
+        createBy, editTime, editBy)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.loginact}, #{entity.name}, #{entity.loginpwd}, #{entity.email}, #{entity.expiretime},
+            #{entity.lockstate}, #{entity.deptno}, #{entity.allowips}, #{entity.createtime}, #{entity.createby},
+            #{entity.edittime}, #{entity.editby})
+        </foreach>
+        on duplicate key update
+        loginAct = values(loginAct),
+        name = values(name),
+        loginPwd = values(loginPwd),
+        email = values(email),
+        expireTime = values(expireTime),
+        lockState = values(lockState),
+        deptno = values(deptno),
+        allowIps = values(allowIps),
+        createTime = values(createTime),
+        createBy = values(createBy),
+        editTime = values(editTime),
+        editBy = values(editBy)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update tbl_user
+        <set>
+            <if test="loginact != null and loginact != ''">
+                loginAct = #{loginact},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="loginpwd != null and loginpwd != ''">
+                loginPwd = #{loginpwd},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="expiretime != null and expiretime != ''">
+                expireTime = #{expiretime},
+            </if>
+            <if test="lockstate != null and lockstate != ''">
+                lockState = #{lockstate},
+            </if>
+            <if test="deptno != null and deptno != ''">
+                deptno = #{deptno},
+            </if>
+            <if test="allowips != null and allowips != ''">
+                allowIps = #{allowips},
+            </if>
+            <if test="createtime != null and createtime != ''">
+                createTime = #{createtime},
+            </if>
+            <if test="createby != null and createby != ''">
+                createBy = #{createby},
+            </if>
+            <if test="edittime != null and edittime != ''">
+                editTime = #{edittime},
+            </if>
+            <if test="editby != null and editby != ''">
+                editBy = #{editby},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from tbl_user
+        where id = #{id}
+    </delete>
+
+
+    <!--
+    通过用户名和用户密码来查询数据
+    User getUserByActAndByPwd(Map<String, Object> map);
+    -->
+    <select id="getUserByActAndByPwd" resultMap="TblUserMap">
+        select
+        <include refid="AllData"></include>
+        from tbl_user
+        where loginAct=#{loginact} and loginPwd=#{loginpwd}
+    </select>
+</mapper>
+
