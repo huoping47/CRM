@@ -12,7 +12,15 @@
     <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         window.onload = function () {
+            $(window).keydown(function (event) {
+                if (event.keyCode === 13) {
+                    userLogin()
+                }
+            })
             $("#loginBtn").click(function () {
+                userLogin()
+            })
+            userLogin = function () {
                 var loginAct = $("#loginAct").val()
                 var loginPwd = $("#loginPwd").val()
                 var isRemPwd = $("#isRemPwd").prop("checked")
@@ -31,17 +39,21 @@
                         "isRemPwd": isRemPwd
                     },
                     success: function (data) {//接收回来的数据
-                        if (data.code === 1) {
-                            alert("nihao")
+                        if (data.code === "1") {
                             //登陆成功
-                            window.location.href("workbench/LoginSuccessIndex.do")
+                            window.location.href = "workbench/LoginSuccessIndex.do"
+                            $("#msg").html("")
+
                         } else {
                             $("#msg").html(data.message)
                         }
+                    },
+                    beforeSend: function () {//在ajax执行前,可以提前执行的语句,需要返回布尔类型的值,才决定执不执行
+                        $("#msg").html("<span style='color: black'>正在查询数据......</span>")
+                        return true;
                     }
                 })
-            })
-
+            }
 
             //获得焦点时清空错误的提示
             $("#loginAct").focus(function () {

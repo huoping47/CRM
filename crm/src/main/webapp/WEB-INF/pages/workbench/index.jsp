@@ -1,3 +1,4 @@
+<%@ page import="com.huoping.crm.setting.pojo.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -135,7 +136,6 @@
         </div>
     </div>
 </div>
-
 <!-- 顶部 -->
 <div id="top" style="height: 50px; background-color: #3C3C3C; width: 100%;">
     <div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">
@@ -145,7 +145,8 @@
             <li class="dropdown user-dropdown">
                 <a href="javascript:void(0)" style="text-decoration: none; color: white;" class="dropdown-toggle"
                    data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-user"></span> zhangsan <span class="caret"></span>
+                    <span class="glyphicon glyphicon-user"></span> ${sessionUserName.name}<span
+                        class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="../settings/index.html"><span class="glyphicon glyphicon-wrench"></span> 系统设置</a></li>

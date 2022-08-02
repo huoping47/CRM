@@ -3,13 +3,15 @@ package com.huoping.crm.setting.web.controller;
 import com.huoping.crm.setting.pojo.User;
 import com.huoping.crm.setting.service.UserService;
 import com.huoping.crm.shared.UserLoginMsgData;
+import com.huoping.crm.shared.untils.DateTimeUntil;
+import com.huoping.crm.shared.untils.StaticDataUntil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,32 +31,37 @@ public class UserController {
 
     @RequestMapping("/settings/qx/user/login.do")
     @ResponseBody
-    public Object login(String loginact, String loginpwd, String isRemPwd, HttpServletRequest request) {
+    public Object login(String loginact, String loginpwd, String isRemPwd, HttpServletRequest request, HttpSession session) {
         Map<String, Object> map = new HashMap<>();
         map.put("loginAct", loginact);
         map.put("loginPwd", loginpwd);
         User user = userService.getUserByActAndByPwd(map);
         UserLoginMsgData userLoginMsgData = new UserLoginMsgData();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String date = sdf.format(new Date());
+        String date = DateTimeUntil.DateTimeForMatString(new Date());
+        try {
+            Thread.sleep(1000 * 3);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         if (user == null) {
             //登录失败/用户名或者密码错误
-            userLoginMsgData.setCode("0");
+            userLoginMsgData.setCode(StaticDataUntil.RETURN_CODE_ERROR);
             userLoginMsgData.setMessage("<span style='color: red'>用户名或者密码错误</span>");
         } else if ("0".equals(user.getLockstate())) {
             //登录失败,账号状态不正确
-            userLoginMsgData.setCode("0");
+            userLoginMsgData.setCode(StaticDataUntil.RETURN_CODE_ERROR);
             userLoginMsgData.setMessage("<span style='color: red'>账号状态不正确</span>");
         } else if (request.getRemoteAddr().contains(user.getAllowips())) {
             //登录失败,IP地址不支持
-            userLoginMsgData.setCode("0");
+            userLoginMsgData.setCode(StaticDataUntil.RETURN_CODE_ERROR);
             userLoginMsgData.setMessage("<span style='color: red'>IP地址不支持</span>");
         } else if (date.compareTo(user.getExpiretime()) > 0) {
             //登录失败,您的账号以过期
-            userLoginMsgData.setCode("0");
+            userLoginMsgData.setCode(StaticDataUntil.RETURN_CODE_ERROR);
             userLoginMsgData.setMessage("<span style='color: red'>您的账号以过期</span>");
         } else {
-            userLoginMsgData.setCode("1");
+            session.setAttribute(StaticDataUntil.SESSION_USER_USERNAME, user);
+            userLoginMsgData.setCode(StaticDataUntil.RETURN_CODE_SUCCESS);
             userLoginMsgData.setMessage("欢迎回来");
         }
         return userLoginMsgData;
