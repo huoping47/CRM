@@ -1,12 +1,16 @@
 <%@ page import="com.huoping.crm.setting.pojo.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<% String path = request.getScheme() + "://" + request.getServerName() + ":"
+        + request.getServerPort() + request.getContextPath() + "/";
+%>
 <!DOCTYPE html>
 <html>
 <head>
+    <base href="<%=path%>">
     <meta charset="UTF-8">
-    <link href="../jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
-    <script type="text/javascript" src="../jquery/jquery-1.11.1-min.js"></script>
-    <script type="text/javascript" src="../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+    <link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+    <script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
+    <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
     <script type="text/javascript">
 
         //页面加载完毕
@@ -34,8 +38,12 @@
             });
 
 
-            window.open("main/index.html", "workareaFrame");
+            window.open("workbench/main/index.do", "workareaFrame");
 
+            //退出登录
+            $("#exitLogin").click(function () {
+                window.location.href = "setting/qx/user/ExitLogin.do"
+            })
         });
 
     </script>
@@ -107,7 +115,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        onclick="window.location.href='../settings/qx/user/login.jsp';">更新
+                        onclick="window.location.href='settings/qx/user/login.jsp';">更新
                 </button>
             </div>
         </div>
@@ -129,8 +137,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        onclick="window.location.href='../settings/qx/user/login.jsp';">确定
+                <button type="button" class="btn btn-primary" id="exitLogin" data-dismiss="modal">确定
                 </button>
             </div>
         </div>
@@ -149,7 +156,7 @@
                         class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="../settings/index.html"><span class="glyphicon glyphicon-wrench"></span> 系统设置</a></li>
+                    <li><a href="settings/index.html"><span class="glyphicon glyphicon-wrench"></span> 系统设置</a></li>
                     <li><a href="javascript:void(0)" data-toggle="modal" data-target="#myInformation"><span
                             class="glyphicon glyphicon-file"></span> 我的资料</a></li>
                     <li><a href="javascript:void(0)" data-toggle="modal" data-target="#editPwdModal"><span
@@ -169,7 +176,7 @@
     <div id="navigation" style="left: 0px; width: 18%; position: relative; height: 100%; overflow:auto;">
 
         <ul id="no1" class="nav nav-pills nav-stacked">
-            <li class="liClass"><a href="main/index.html" target="workareaFrame"><span
+            <li class="liClass"><a href="workbench/main/index.do" target="workareaFrame"><span
                     class="glyphicon glyphicon-home"></span> 工作台</a></li>
             <li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span
                     class="glyphicon glyphicon-tag"></span> 动态</a></li>

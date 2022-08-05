@@ -25,5 +25,16 @@
         <property name="suffix" value=".jsp"></property>
     </bean>
 
-
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--拦截哪些请求.-->
+            <mvc:mapping path="/settings/**"/>
+            <mvc:mapping path="/workbench/**"/>
+            <!--不需要拦截哪些请求-->
+            <mvc:exclude-mapping path="/settings/qx/user/toLogin.do"/>
+            <mvc:exclude-mapping path="/settings/qx/user/login.do"/>
+            <!--            拦截的方式,条件-->
+            <bean class="com.huoping.crm.setting.web.interceptor.LoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>
