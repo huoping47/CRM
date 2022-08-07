@@ -2,6 +2,8 @@ package com.huoping.crm.workbench.service;
 
 import com.huoping.crm.workbench.entity.TblActivity;
 
+import java.util.List;
+
 /**
  * (TblActivity)表服务接口
  *
@@ -49,5 +51,12 @@ public interface TblActivityService {
      * @return
      */
     int insertAcitityData(TblActivity tblActivity);
+
+    /**
+     * 查询所有活动数据
+     *
+     * @return
+     */
+    List<TblActivity> selectActivityList();
 
 }

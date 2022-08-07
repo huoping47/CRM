@@ -211,5 +211,11 @@
         values (#{id}, #{owner}, #{name}, #{startdate}, #{enddate}, #{cost}, #{description}, #{createtime},
                 #{createby})
     </insert>
+
+    <!--        List<TblActivity> selectActivityList();-->
+    <select id="selectActivityList" resultMap="TblActivityMap">
+        select id, owner, name, startDate, endDate
+        from tbl_activity
+    </select>
 </mapper>
 

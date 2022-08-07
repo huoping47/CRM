@@ -27,10 +27,11 @@ public class ActivityController {
     private TblActivityService tblActivityService;
 
     @RequestMapping("/workbench/activity/index.do")
-
     public String index(HttpServletRequest request) {
         List<User> acitityUserNames = userService.getAcitityUserNames();
         request.setAttribute("usersName", acitityUserNames);
+        List<TblActivity> tblActivities = tblActivityService.selectActivityList();
+        request.setAttribute("tblActivities", tblActivities);
         return "workbench/activity/index";
     }
 

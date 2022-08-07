@@ -6,6 +6,8 @@ import com.huoping.crm.workbench.service.TblActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * (TblActivity)表服务实现类
  *
@@ -72,5 +74,15 @@ public class TblActivityServiceImpl implements TblActivityService {
     @Override
     public int insertAcitityData(TblActivity tblActivity) {
         return tblActivityDao.insertAcitityData(tblActivity);
+    }
+
+    /**
+     * 查询所有活动数据
+     *
+     * @return
+     */
+    @Override
+    public List<TblActivity> selectActivityList() {
+        return tblActivityDao.selectActivityList();
     }
 }

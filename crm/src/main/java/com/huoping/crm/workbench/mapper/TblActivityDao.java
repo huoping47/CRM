@@ -87,5 +87,12 @@ public interface TblActivityDao {
      * @return
      */
     int insertAcitityData(TblActivity tblActivity);
+
+    /**
+     * 查询所有的活动数据
+     *
+     * @return
+     */
+    List<TblActivity> selectActivityList();
 }
 

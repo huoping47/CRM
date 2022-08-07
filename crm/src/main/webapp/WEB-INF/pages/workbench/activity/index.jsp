@@ -68,6 +68,11 @@
                             alert(data.message)
                             return;
                         } else {
+                            $("#create-marketActivityName").val("")
+                            $.trim($("#create-startTime").val(""));
+                            $.trim($("#create-endTime").val(""));
+                            $("#create-cost").val("")
+                            $.trim($("#create-describe").val(""))
                             $("#createActivityModal").modal("hide")
                         }
                     }
@@ -136,10 +141,13 @@
 
                 </form>
 
+
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="saveAcitityData">保存</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+                <button type="button" class="btn btn-primary" id="saveAcitityData">保存
+                </button>
             </div>
         </div>
     </div>
@@ -270,6 +278,8 @@
                         class="glyphicon glyphicon-pencil"></span> 修改
                 </button>
                 <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+                <button type="button" class="btn btn-primary" onclick="location.reload()">刷新
+                </button>
             </div>
 
         </div>
@@ -285,22 +295,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="active">
-                    <td><input type="checkbox"/></td>
-                    <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='detail.html';">发传单</a></td>
-                    <td>zhangsan</td>
-                    <td>2020-10-10</td>
-                    <td>2020-10-20</td>
-                </tr>
-                <tr class="active">
-                    <td><input type="checkbox"/></td>
-                    <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='detail.html';">发传单</a></td>
-                    <td>zhangsan</td>
-                    <td>2020-10-10</td>
-                    <td>2020-10-20</td>
-                </tr>
+                <c:forEach items="${tblActivities}" var="act">
+                    <tr class="active">
+                        <td><input type="checkbox"/></td>
+                        <td><a style="text-decoration: none; cursor: pointer;"
+                               onclick="window.location.href='detail.html';">${act.name}</a></td>
+                        <td>${act.owner}</td>
+                        <td>${act.startdate}</td>
+                        <td>${act.enddate}</td>
+                    </tr>
+                </c:forEach>
                 </tbody>
             </table>
         </div>
