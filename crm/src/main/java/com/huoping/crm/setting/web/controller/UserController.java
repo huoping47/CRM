@@ -41,7 +41,7 @@ public class UserController {
         UserLoginMsgData userLoginMsgData = new UserLoginMsgData();
         String date = DateTimeUntil.DateTimeForMatString(new Date());
         try {
-            Thread.sleep(1000 * 5);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

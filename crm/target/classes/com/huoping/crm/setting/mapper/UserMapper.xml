@@ -242,5 +242,12 @@
         from tbl_user
         where loginact=#{loginAct} and loginpwd=#{loginPwd}
     </select>
+
+    <!--    查询所有的用户-->
+    <select id="getAcitityUserNames" resultMap="TblUserMap">
+        select
+        <include refid="AllData"/>
+        from tbl_user where lockState='1'
+    </select>
 </mapper>
 

@@ -88,5 +88,7 @@ public interface UserMapper {
      * @return
      */
     User getUserByActAndByPwd(Map<String, Object> map);
+
+    List<User> getAcitityUserNames();
 }
 
