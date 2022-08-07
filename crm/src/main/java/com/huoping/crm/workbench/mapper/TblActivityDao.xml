@@ -15,7 +15,10 @@
         <result property="edittime" column="editTime" jdbcType="VARCHAR"/>
         <result property="editby" column="editBy" jdbcType="VARCHAR"/>
     </resultMap>
-
+    <sql id="AllData">
+        id
+        ,owner,name,startDate,endDate,cost,description,createTime,createBy,editTime,editBy
+    </sql>
     <!--查询单个-->
     <select id="queryById" resultMap="TblActivityMap">
         select id,
@@ -200,6 +203,13 @@
         from tbl_activity
         where id = #{id}
     </delete>
-
+    <!-- 新增市场活动数据   -->
+    <!--        int insertAcitityData(TblActivity tblActivity);-->
+    <insert id="insertAcitityData">
+        insert into tbl_activity
+        (id, owner, name, startDate, endDate, cost, description, createTime, createBy)
+        values (#{id}, #{owner}, #{name}, #{startdate}, #{enddate}, #{cost}, #{description}, #{createtime},
+                #{createby})
+    </insert>
 </mapper>
 

@@ -62,4 +62,15 @@ public class TblActivityServiceImpl implements TblActivityService {
     public boolean deleteById(String id) {
         return this.tblActivityDao.deleteById(id) > 0;
     }
+
+    /**
+     * 新增市场活动
+     *
+     * @param tblActivity
+     * @return
+     */
+    @Override
+    public int insertAcitityData(TblActivity tblActivity) {
+        return tblActivityDao.insertAcitityData(tblActivity);
+    }
 }

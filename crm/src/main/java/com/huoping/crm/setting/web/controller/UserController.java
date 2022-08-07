@@ -2,7 +2,7 @@ package com.huoping.crm.setting.web.controller;
 
 import com.huoping.crm.setting.pojo.User;
 import com.huoping.crm.setting.service.UserService;
-import com.huoping.crm.shared.UserLoginMsgData;
+import com.huoping.crm.shared.MsgData;
 import com.huoping.crm.shared.untils.DateTimeUntil;
 import com.huoping.crm.shared.untils.StaticDataUntil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class UserController {
         map.put("loginAct", loginact);
         map.put("loginPwd", loginpwd);
         User user = userService.getUserByActAndByPwd(map);
-        UserLoginMsgData userLoginMsgData = new UserLoginMsgData();
+        MsgData msgData = new MsgData();
         String date = DateTimeUntil.DateTimeForMatString(new Date());
         try {
             Thread.sleep(1000);
@@ -47,23 +47,23 @@ public class UserController {
         }
         if (user == null) {
             //登录失败/用户名或者密码错误
-            userLoginMsgData.setCode(StaticDataUntil.RETURN_CODE_ERROR);
-            userLoginMsgData.setMessage("<span style='color: red'>用户名或者密码错误</span>");
+            msgData.setCode(StaticDataUntil.RETURN_CODE_ERROR);
+            msgData.setMessage("<span style='color: red'>用户名或者密码错误</span>");
         } else if ("0".equals(user.getLockstate())) {
             //登录失败,账号状态不正确
-            userLoginMsgData.setCode(StaticDataUntil.RETURN_CODE_ERROR);
-            userLoginMsgData.setMessage("<span style='color: red'>账号状态不正确</span>");
+            msgData.setCode(StaticDataUntil.RETURN_CODE_ERROR);
+            msgData.setMessage("<span style='color: red'>账号状态不正确</span>");
         } else if (request.getRemoteAddr().contains(user.getAllowips())) {
             //登录失败,IP地址不支持
-            userLoginMsgData.setCode(StaticDataUntil.RETURN_CODE_ERROR);
-            userLoginMsgData.setMessage("<span style='color: red'>IP地址不支持</span>");
+            msgData.setCode(StaticDataUntil.RETURN_CODE_ERROR);
+            msgData.setMessage("<span style='color: red'>IP地址不支持</span>");
         } else if (date.compareTo(user.getExpiretime()) > 0) {
             //登录失败,您的账号以过期
-            userLoginMsgData.setCode(StaticDataUntil.RETURN_CODE_ERROR);
-            userLoginMsgData.setMessage("<span style='color: red'>您的账号以过期</span>");
+            msgData.setCode(StaticDataUntil.RETURN_CODE_ERROR);
+            msgData.setMessage("<span style='color: red'>您的账号以过期</span>");
         } else {
             //登录成功,将用户的数据存入session中,主页展示登录用户的信息
-            userLoginMsgData.setCode(StaticDataUntil.RETURN_CODE_SUCCESS);
+            msgData.setCode(StaticDataUntil.RETURN_CODE_SUCCESS);
             session.setAttribute(StaticDataUntil.SESSION_USER_USERNAME, user);
             //实现记住密码,往cookie中存储数据
             if ("true".equals(isRemPwd)) {
@@ -77,7 +77,7 @@ public class UserController {
                 response.addCookie(loginPwdCookie);
             }
         }
-        return userLoginMsgData;
+        return msgData;
     }
 
 

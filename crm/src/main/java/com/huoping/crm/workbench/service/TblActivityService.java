@@ -17,7 +17,7 @@ public interface TblActivityService {
      * @return 实例对象
      */
     TblActivity queryById(String id);
-    
+
     /**
      * 新增数据
      *
@@ -41,5 +41,13 @@ public interface TblActivityService {
      * @return 是否成功
      */
     boolean deleteById(String id);
+
+    /**
+     * 新增市场活动
+     *
+     * @param tblActivity
+     * @return
+     */
+    int insertAcitityData(TblActivity tblActivity);
 
 }

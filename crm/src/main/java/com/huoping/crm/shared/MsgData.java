@@ -1,6 +1,6 @@
 package com.huoping.crm.shared;
 
-public class UserLoginMsgData {
+public class MsgData {
     private String code;
     private String message;
     private Object obj;
@@ -9,7 +9,7 @@ public class UserLoginMsgData {
         return code;
     }
 
-    public UserLoginMsgData() {
+    public MsgData() {
     }
 
     public void setCode(String code) {
@@ -34,14 +34,14 @@ public class UserLoginMsgData {
 
     @Override
     public String toString() {
-        return "UserLoginMsgData{" +
+        return "MsgData{" +
                 "code='" + code + '\'' +
                 ", message='" + message + '\'' +
                 ", obj=" + obj +
                 '}';
     }
 
-    public UserLoginMsgData(String code, String message, Object obj) {
+    public MsgData(String code, String message, Object obj) {
         this.code = code;
         this.message = message;
         this.obj = obj;

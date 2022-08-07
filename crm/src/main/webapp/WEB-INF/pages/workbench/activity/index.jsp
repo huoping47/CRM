@@ -23,8 +23,56 @@
     <script type="text/javascript">
 
         $(function () {
+            //提交按钮事件
+            $("#insertAcivity").click(function () {
+                $("#createActivityModal").modal("show")
+            })
 
+            //保存按钮事件
+            $("#saveAcitityData").click(function () {
+                //验证需要提交的数据
+                var owner = $("#create-marketActivityOwner").val();
+                var name = $("#create-marketActivityName").val();
+                if (name === null || name === "") {
+                    alert("活动名称不能为空")
+                    return
+                }
+                var startDate = $.trim($("#create-startTime").val());
+                var endDate = $.trim($("#create-endTime").val());
+                if (startDate > endDate) {
+                    alert("请输入正确的活动时间")
+                    return;
+                }
+                var cost = $("#create-cost").val()
+                var refCost = /^-[1-9]\d*|0$ 或 ^((-\d+)|(0+))$/
+                if (refCost.test(cost)) {
+                    alert("请输入大于0的数字")
+                    return;
+                }
+                var describe = $.trim($("#create-describe").val())
 
+                $.ajax({
+                    url: "workbench/activity/insertActivityData.do",
+                    data: {
+                        "owner": owner,
+                        "name": name,
+                        "startdate": startDate,
+                        "enddate": endDate,
+                        "cost": cost,
+                        "description": describe
+                    },
+                    type: "post",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code === "0") {
+                            alert(data.message)
+                            return;
+                        } else {
+                            $("#createActivityModal").modal("hide")
+                        }
+                    }
+                })
+            })
         });
 
     </script>
@@ -91,7 +139,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+                <button type="button" class="btn btn-primary" id="saveAcitityData">保存</button>
             </div>
         </div>
     </div>
@@ -213,7 +261,9 @@
         <div class="btn-toolbar" role="toolbar"
              style="background-color: #F7F7F7; height: 50px; position: relative;top: 5px;">
             <div class="btn-group" style="position: relative; top: 18%;">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createActivityModal">
+                <button type="button" class="btn btn-primary" id="insertAcivity" data-target="#createActivityModal">
+                    <%--            data-toggle="modal" --%>
+
                     <span class="glyphicon glyphicon-plus"></span> 创建
                 </button>
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span

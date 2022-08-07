@@ -80,5 +80,12 @@ public interface TblActivityDao {
      */
     int deleteById(String id);
 
+    /**
+     * 新增市场活动数据
+     *
+     * @param tblActivity
+     * @return
+     */
+    int insertAcitityData(TblActivity tblActivity);
 }
 
