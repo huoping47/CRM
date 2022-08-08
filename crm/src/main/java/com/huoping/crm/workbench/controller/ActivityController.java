@@ -39,7 +39,6 @@ public class ActivityController {
     @RequestMapping("/workbench/activity/insertActivityData.do")
     @ResponseBody
     public Object insertAcitityData(TblActivity tblActivity, HttpSession session) {
-        System.out.println("进入了这里");
         tblActivity.setId(UUIDUntil.getUUID());
         User user = (User) session.getAttribute(StaticDataUntil.SESSION_USER_USERNAME);
         tblActivity.setCreateby(user.getId());

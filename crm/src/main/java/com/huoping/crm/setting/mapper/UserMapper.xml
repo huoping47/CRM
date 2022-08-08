@@ -247,7 +247,7 @@
     <select id="getAcitityUserNames" resultMap="TblUserMap">
         select
         <include refid="AllData"/>
-        from tbl_user where lockState='1'
+        from tbl_user where lockstate='1'
     </select>
 </mapper>
 

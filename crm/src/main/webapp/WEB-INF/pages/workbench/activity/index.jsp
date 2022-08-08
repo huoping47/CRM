@@ -27,7 +27,6 @@
             $("#insertAcivity").click(function () {
                 $("#createActivityModal").modal("show")
             })
-
             //保存按钮事件
             $("#saveAcitityData").click(function () {
                 //验证需要提交的数据
@@ -39,9 +38,11 @@
                 }
                 var startDate = $.trim($("#create-startTime").val());
                 var endDate = $.trim($("#create-endTime").val());
-                if (startDate > endDate) {
-                    alert("请输入正确的活动时间")
-                    return;
+                if (startDate != null || endDate != null) {
+                    if (endDate < startDate) {
+                        alert("请输入正确的活动时间")
+                        return;
+                    }
                 }
                 var cost = $("#create-cost").val()
                 var refCost = /^-[1-9]\d*|0$ 或 ^((-\d+)|(0+))$/
@@ -77,6 +78,15 @@
                         }
                     }
                 })
+            })
+            $(".mydate").datetimepicker({
+                language: 'zh-CN',
+                format: "yyyy-mm-dd",
+                minView: "month",
+                initialDate: new Date(),
+                autoclose: true,
+                todayBtn: true,
+                clearBtn: true
             })
         });
 
@@ -118,11 +128,11 @@
                     <div class="form-group">
                         <label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="create-startTime">
+                            <input type="text" class="form-control mydate" readonly id="create-startTime">
                         </div>
                         <label for="create-endTime" class="col-sm-2 control-label">结束日期</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="create-endTime">
+                            <input type="text" class="form-control mydate" readonly id="create-endTime">
                         </div>
                     </div>
                     <div class="form-group">
