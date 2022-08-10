@@ -212,10 +212,65 @@
                 #{createby})
     </insert>
 
-    <!--        List<TblActivity> selectActivityList();-->
-    <select id="selectActivityList" resultMap="TblActivityMap">
-        select id, owner, name, startDate, endDate
-        from tbl_activity
+    <!--
+        查询所有的市场活动信息
+         List<TblActivity> selectAllDataActivityForPage(Map<String, Object> map);
+    -->
+    <select id="selectAllDataActivityForPage" resultMap="TblActivityMap" parameterType="map">
+        select ac.id,
+        us.name as owner,
+        ac.name,
+        startDate,
+        endDate,
+        cost,
+        description,
+        ac.createTime,
+        us2.name as createBy,
+        ac.editTime,
+        us3.name as editBy
+        from tbl_activity as ac
+        join tbl_user as us on ac.owner = us.id
+        join tbl_user as us2 on ac.createBy = us2.id
+        left join tbl_user as us3 on ac.editBy = us3.id
+        <where>
+            <if test="name != null and name !=''">
+                and ac.name like concat('%',#{name},'%')
+            </if>
+            <if test="owner != null and owner !=''">
+                and us.name like concat('%',#{owner},'%')
+            </if>
+            <if test="startdate !=null and startdate != ''">
+                and startDate >= #{startdate}
+            </if>
+            <if test="enddate !=null and enddate != ''">
+                and #{enddate} >= endDate
+            </if>
+        </where>
+        order by ac.createTime desc
+        limit ${pageNo},${pageSize}
+    </select>
+
+    <!--    统计市场活动的总条数    int SelectCountAllActivityData(Map<String, Object> map);-->
+    <select id="SelectCountAllActivityData" parameterType="map" resultType="int">
+        select count(*)
+        from tbl_activity as ac
+        join tbl_user as us on ac.owner = us.id
+        join tbl_user as us2 on ac.createBy = us2.id
+        left join tbl_user as us3 on ac.editBy = us3.id
+        <where>
+            <if test="name != null and name !=''">
+                and ac.name like concat('%',#{name},'%')
+            </if>
+            <if test="owner != null and owner !=''">
+                and us.name like concat('%',#{owner},'%')
+            </if>
+            <if test="startdate !=null and startdate != ''">
+                and startdate >= #{startdate}
+            </if>
+            <if test="enddate !=null and enddate != ''">
+                and #{enddate} >= enddate
+            </if>
+        </where>
     </select>
 </mapper>
 

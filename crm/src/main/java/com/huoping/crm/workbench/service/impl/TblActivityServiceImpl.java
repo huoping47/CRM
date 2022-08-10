@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (TblActivity)表服务实现类
@@ -65,6 +66,7 @@ public class TblActivityServiceImpl implements TblActivityService {
         return this.tblActivityDao.deleteById(id) > 0;
     }
 
+
     /**
      * 新增市场活动
      *
@@ -73,16 +75,28 @@ public class TblActivityServiceImpl implements TblActivityService {
      */
     @Override
     public int insertAcitityData(TblActivity tblActivity) {
+
         return tblActivityDao.insertAcitityData(tblActivity);
     }
 
+
     /**
-     * 查询所有活动数据
+     * 查询所有市场活动的数据
      *
-     * @return
+     * @param map
      */
     @Override
-    public List<TblActivity> selectActivityList() {
-        return tblActivityDao.selectActivityList();
+    public List<TblActivity> selectAllDataActivityForPage(Map<String, Object> map) {
+        return tblActivityDao.selectAllDataActivityForPage(map);
+    }
+
+    /**
+     * 查询市场活动的总条数
+     *
+     * @param map
+     */
+    @Override
+    public int SelectCountAllActivityData(Map<String, Object> map) {
+        return tblActivityDao.SelectCountAllActivityData(map);
     }
 }

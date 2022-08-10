@@ -12,6 +12,7 @@
     <link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
     <link href="jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css"
           rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="jquery/bs_pagination-master/jquery.bs_pagination.min.css">
 
     <script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
     <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
@@ -20,6 +21,8 @@
     <script type="text/javascript"
             src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
+    <script type="text/javascript" src="jquery/bs_pagination-master/jquery.bs_pagination.min.js"></script>
+    <script type="text/javascript" src="jquery/bs_pagination-master/localization/en.min.js"></script>
     <script type="text/javascript">
 
         $(function () {
@@ -30,7 +33,7 @@
             //保存按钮事件
             $("#saveAcitityData").click(function () {
                 //验证需要提交的数据
-                var owner = $("#create-marketActivityOwner").val();
+                var owner = $("#create-marketActivityOwner option:checked").attr("id");
                 var name = $("#create-marketActivityName").val();
                 if (name === null || name === "") {
                     alert("活动名称不能为空")
@@ -87,6 +90,59 @@
                 autoclose: true,
                 todayBtn: true,
                 clearBtn: true
+            })
+
+            OnloadDataAll()
+
+            //分页查询函数
+            function OnloadDataAll() {
+                var get_name = $("#get-name").val()
+                var get_owner = $("#get-owner").val()
+                var get_startDate = $("#get-startDate").val()
+                var get_endDate = $("#get-endDate").val()
+                var pageNo = 0
+                var pageSize = 10
+                // var pageNo = (page - 1) * pageSize
+
+                $.ajax({
+                    url: "workbench/activity/selectAllDataActivityForPage",
+                    type: "post",
+                    dataType: "json",
+                    // String name, String owner, String startdate,
+                    // String enddate, String pageNo, String pageSize
+                    data: {
+                        name: get_name,
+                        owner: get_owner,
+                        startdate: get_startDate,
+                        enddate: get_endDate,
+                        pageNo: pageNo,
+                        pageSize: pageSize
+                    },
+                    success: function (data) {
+                        if (data.list == '') {
+                            alert("暂时还没有符合要求的信息")
+                            return
+                        }
+                        $("#countPageB").text(data.countData);
+                        let htmlBody = ""
+                        $.each(data.list, function (index, obj) {
+                            htmlBody += "<tr class=\"active\">"
+                            htmlBody += " <td><input type=\"checkbox\" value='" + obj.id + "'/></td>"
+                            htmlBody += "<td><a style=\"text-decoration: none; cursor: pointer;" +
+                                "\"onclick=\"window.location.href='detail.html';\">" + obj.name + "</a></td>"
+                            htmlBody += "<td>" + obj.owner + "</td>"
+                            htmlBody += "<td>" + obj.startdate + "</td>"
+                            htmlBody += "<td>" + obj.enddate + "</td>"
+                            htmlBody += "</tr>"
+                        })
+                        $("#dataBody").html(htmlBody)
+                    }
+                })
+            }
+
+            //按条件查询函数
+            $("#getDataBtn").click(function () {
+                OnloadDataAll()
             })
         });
 
@@ -247,14 +303,14 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">名称</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="get-name">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">所有者</div>
-                        <input class="form-control" type="text">
+                        <input class="form-control" type="text" id="get-owner">
                     </div>
                 </div>
 
@@ -262,17 +318,17 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">开始日期</div>
-                        <input class="form-control" type="text" id="startTime"/>
+                        <input class="form-control mydate" readonly type="text" id="get-startDate"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">结束日期</div>
-                        <input class="form-control" type="text" id="endTime">
+                        <input class="form-control mydate" readonly type="text" id="get-endDate">
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-default">查询</button>
+                <button type="button" class="btn btn-default" id="getDataBtn">查询</button>
 
             </form>
         </div>
@@ -304,24 +360,25 @@
                     <td>结束日期</td>
                 </tr>
                 </thead>
-                <tbody>
-                <c:forEach items="${tblActivities}" var="act">
-                    <tr class="active">
-                        <td><input type="checkbox"/></td>
-                        <td><a style="text-decoration: none; cursor: pointer;"
-                               onclick="window.location.href='detail.html';">${act.name}</a></td>
-                        <td>${act.owner}</td>
-                        <td>${act.startdate}</td>
-                        <td>${act.enddate}</td>
-                    </tr>
-                </c:forEach>
+                <tbody id="dataBody">
+                <%--                <c:forEach items="${tblActivities}" var="act">--%>
+                <%--                    <tr class="active">--%>
+                <%--                        <td><input type="checkbox"/></td>--%>
+                <%--                        <td><a style="text-decoration: none; cursor: pointer;"--%>
+                <%--                               onclick="window.location.href='detail.html';">${act.name}</a></td>--%>
+                <%--                        <td>${act.owner}</td>--%>
+                <%--                        <td>${act.startdate}</td>--%>
+                <%--                        <td>${act.enddate}</td>--%>
+                <%--                    </tr>--%>
+                <%--                </c:forEach>--%>
                 </tbody>
             </table>
         </div>
 
         <div style="height: 50px; position: relative;top: 30px;">
             <div>
-                <button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
+                <button type="button" class="btn btn-default" style="cursor: default;">共<b id="countPageB">0</b>条记录
+                </button>
             </div>
             <div class="btn-group" style="position: relative;top: -34px; left: 110px;">
                 <button type="button" class="btn btn-default" style="cursor: default;">显示</button>

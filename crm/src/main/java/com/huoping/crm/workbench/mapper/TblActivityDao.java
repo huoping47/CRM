@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (TblActivity)表数据库访问层
@@ -93,6 +94,11 @@ public interface TblActivityDao {
      *
      * @return
      */
-    List<TblActivity> selectActivityList();
+    List<TblActivity> selectAllDataActivityForPage(Map<String, Object> map);
+
+    /**
+     * 统计市场活动数据的总条数
+     */
+    int SelectCountAllActivityData(Map<String, Object> map);
 }
 

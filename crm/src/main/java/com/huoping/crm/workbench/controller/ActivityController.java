@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ActivityController {
@@ -30,8 +32,6 @@ public class ActivityController {
     public String index(HttpServletRequest request) {
         List<User> acitityUserNames = userService.getAcitityUserNames();
         request.setAttribute("usersName", acitityUserNames);
-        List<TblActivity> tblActivities = tblActivityService.selectActivityList();
-        request.setAttribute("tblActivities", tblActivities);
         return "workbench/activity/index";
     }
 
@@ -59,4 +59,26 @@ public class ActivityController {
         }
         return msgData;
     }
+
+
+    @RequestMapping("/workbench/activity/selectAllDataActivityForPage")
+    @ResponseBody
+    public Object selectAllDataActivityForPage(String name, String owner, String startdate,
+                                               String enddate, String pageNo, String pageSize) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("owner", owner);
+        map.put("startdate", startdate);
+        map.put("enddate", enddate);
+        map.put("pageNo", pageNo);
+        map.put("pageSize", pageSize);
+        //调用service层去查询数据
+        List<TblActivity> list = tblActivityService.selectAllDataActivityForPage(map);
+        int countData = tblActivityService.SelectCountAllActivityData(map);
+        Map<String, Object> mapData = new HashMap<>();
+        mapData.put("list", list);
+        mapData.put("countData", countData);
+        return mapData;
+    }
+
 }

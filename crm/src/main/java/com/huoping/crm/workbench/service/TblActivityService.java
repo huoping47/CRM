@@ -3,6 +3,7 @@ package com.huoping.crm.workbench.service;
 import com.huoping.crm.workbench.entity.TblActivity;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (TblActivity)表服务接口
@@ -52,11 +53,14 @@ public interface TblActivityService {
      */
     int insertAcitityData(TblActivity tblActivity);
 
-    /**
-     * 查询所有活动数据
-     *
-     * @return
-     */
-    List<TblActivity> selectActivityList();
 
+    /**
+     * 查询所有市场活动的数据
+     */
+    List<TblActivity> selectAllDataActivityForPage(Map<String, Object> map);
+
+    /**
+     * 查询市场活动的总条数
+     */
+    int SelectCountAllActivityData(Map<String, Object> map);
 }
