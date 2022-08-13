@@ -77,6 +77,7 @@
                             $.trim($("#create-endTime").val(""));
                             $("#create-cost").val("")
                             $.trim($("#create-describe").val(""))
+                            OnloadDataAll(1, $("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'))
                             $("#createActivityModal").modal("hide")
                         }
                     }
@@ -92,18 +93,16 @@
                 clearBtn: true
             })
 
-            OnloadDataAll()
+            OnloadDataAll(1, 10)
 
             //分页查询函数
-            function OnloadDataAll() {
+            function OnloadDataAll(pageNo, pageSize) {
                 var get_name = $("#get-name").val()
                 var get_owner = $("#get-owner").val()
                 var get_startDate = $("#get-startDate").val()
                 var get_endDate = $("#get-endDate").val()
-                var pageNo = 0
-                var pageSize = 10
-                // var pageNo = (page - 1) * pageSize
-
+                // var pageNo = pageNo
+                // var pageSize = pageSize
                 $.ajax({
                     url: "workbench/activity/selectAllDataActivityForPage",
                     type: "post",
@@ -115,7 +114,7 @@
                         owner: get_owner,
                         startdate: get_startDate,
                         enddate: get_endDate,
-                        pageNo: pageNo,
+                        pageNo: (pageNo - 1) * pageSize,
                         pageSize: pageSize
                     },
                     success: function (data) {
@@ -123,11 +122,11 @@
                             alert("暂时还没有符合要求的信息")
                             return
                         }
-                        $("#countPageB").text(data.countData);
+                        // $("#countPageB").text(data.countData);
                         let htmlBody = ""
                         $.each(data.list, function (index, obj) {
                             htmlBody += "<tr class=\"active\">"
-                            htmlBody += " <td><input type=\"checkbox\" value='" + obj.id + "'/></td>"
+                            htmlBody += " <td><input type=\"checkbox\"  value='" + obj.id + "'/></td>"
                             htmlBody += "<td><a style=\"text-decoration: none; cursor: pointer;" +
                                 "\"onclick=\"window.location.href='detail.html';\">" + obj.name + "</a></td>"
                             htmlBody += "<td>" + obj.owner + "</td>"
@@ -136,13 +135,38 @@
                             htmlBody += "</tr>"
                         })
                         $("#dataBody").html(htmlBody)
+                        if (data.countData % pageSize == 0) {
+                            totalPage = data.countData / pageSize
+                        } else {
+                            totalPage = parseInt(data.countData / pageSize) + 1
+                        }
+                        $("#demo_pag1").bs_pagination({
+                            currentPage: pageNo,
+                            rowsPerPage: pageSize,
+                            totalPages: totalPage,
+                            totalRows: data.countData,
+                            visiblePageLinks: 5,
+                            showGoToPage: true,
+                            showRowsPerPage: true,//每页显示条数
+                            showRowsInfo: true,
+                            onChangePage: function (event, data) { // returns page_num and rows_per_page after a link has clicked
+                                OnloadDataAll(data.currentPage, data.rowsPerPage)
+                            },
+                        });
                     }
                 })
             }
 
+            $("#checkAll").click(function () {
+                $("#dataBody input[type='checkbox']").prop("checked", this.checked)
+            })
             //按条件查询函数
             $("#getDataBtn").click(function () {
-                OnloadDataAll()
+                OnloadDataAll(1, $("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'))
+            })
+            //刷新按钮
+            $("#resetAll").click(function () {
+                OnloadDataAll(1, $("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'))
             })
         });
 
@@ -344,7 +368,7 @@
                         class="glyphicon glyphicon-pencil"></span> 修改
                 </button>
                 <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
-                <button type="button" class="btn btn-primary" onclick="location.reload()">刷新
+                <button type="button" class="btn btn-primary" id="resetAll">刷新
                 </button>
             </div>
 
@@ -353,7 +377,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr style="color: #B3B3B3;">
-                    <td><input type="checkbox"/></td>
+                    <td><input type="checkbox" id="checkAll"/></td>
                     <td>名称</td>
                     <td>所有者</td>
                     <td>开始日期</td>
@@ -373,43 +397,45 @@
                 <%--                </c:forEach>--%>
                 </tbody>
             </table>
-        </div>
 
-        <div style="height: 50px; position: relative;top: 30px;">
-            <div>
-                <button type="button" class="btn btn-default" style="cursor: default;">共<b id="countPageB">0</b>条记录
-                </button>
-            </div>
-            <div class="btn-group" style="position: relative;top: -34px; left: 110px;">
-                <button type="button" class="btn btn-default" style="cursor: default;">显示</button>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        10
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">20</a></li>
-                        <li><a href="#">30</a></li>
-                    </ul>
-                </div>
-                <button type="button" class="btn btn-default" style="cursor: default;">条/页</button>
-            </div>
-            <div style="position: relative;top: -88px; left: 285px;">
-                <nav>
-                    <ul class="pagination">
-                        <li class="disabled"><a href="#">首页</a></li>
-                        <li class="disabled"><a href="#">上一页</a></li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">下一页</a></li>
-                        <li class="disabled"><a href="#">末页</a></li>
-                    </ul>
-                </nav>
-            </div>
         </div>
+        <div id="demo_pag1"></div>
+
+        <%--        <div style="height: 50px; position: relative;top: 30px;">--%>
+        <%--            <div>--%>
+        <%--                <button type="button" class="btn btn-default" style="cursor: default;">共<b id="countPageB">0</b>条记录--%>
+        <%--                </button>--%>
+        <%--            </div>--%>
+        <%--            <div class="btn-group" style="position: relative;top: -34px; left: 110px;">--%>
+        <%--                <button type="button" class="btn btn-default" style="cursor: default;">显示</button>--%>
+        <%--                <div class="btn-group">--%>
+        <%--                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">--%>
+        <%--                        10--%>
+        <%--                        <span class="caret"></span>--%>
+        <%--                    </button>--%>
+        <%--                    <ul class="dropdown-menu" role="menu">--%>
+        <%--                        <li><a href="#">20</a></li>--%>
+        <%--                        <li><a href="#">30</a></li>--%>
+        <%--                    </ul>--%>
+        <%--                </div>--%>
+        <%--                <button type="button" class="btn btn-default" style="cursor: default;">条/页</button>--%>
+        <%--            </div>--%>
+        <%--            <div style="position: relative;top: -88px; left: 285px;">--%>
+        <%--                <nav>--%>
+        <%--                    <ul class="pagination">--%>
+        <%--                        <li class="disabled"><a href="#">首页</a></li>--%>
+        <%--                        <li class="disabled"><a href="#">上一页</a></li>--%>
+        <%--                        <li class="active"><a href="#">1</a></li>--%>
+        <%--                        <li><a href="#">2</a></li>--%>
+        <%--                        <li><a href="#">3</a></li>--%>
+        <%--                        <li><a href="#">4</a></li>--%>
+        <%--                        <li><a href="#">5</a></li>--%>
+        <%--                        <li><a href="#">下一页</a></li>--%>
+        <%--                        <li class="disabled"><a href="#">末页</a></li>--%>
+        <%--                    </ul>--%>
+        <%--                </nav>--%>
+        <%--            </div>--%>
+        <%--        </div>--%>
 
     </div>
 

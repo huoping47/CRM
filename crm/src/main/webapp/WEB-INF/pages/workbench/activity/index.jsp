@@ -77,7 +77,7 @@
                             $.trim($("#create-endTime").val(""));
                             $("#create-cost").val("")
                             $.trim($("#create-describe").val(""))
-                            OnloadDataAll(1, $("#demo_pag1").bs_pagination('getOption', 'option_name', rowsPerPage))
+                            OnloadDataAll(1, $("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'))
                             $("#createActivityModal").modal("hide")
                         }
                     }
@@ -126,7 +126,7 @@
                         let htmlBody = ""
                         $.each(data.list, function (index, obj) {
                             htmlBody += "<tr class=\"active\">"
-                            htmlBody += " <td><input type=\"checkbox\" value='" + obj.id + "'/></td>"
+                            htmlBody += " <td><input type=\"checkbox\"  value='" + obj.id + "'/></td>"
                             htmlBody += "<td><a style=\"text-decoration: none; cursor: pointer;" +
                                 "\"onclick=\"window.location.href='detail.html';\">" + obj.name + "</a></td>"
                             htmlBody += "<td>" + obj.owner + "</td>"
@@ -157,9 +157,16 @@
                 })
             }
 
+            $("#checkAll").click(function () {
+                $("#dataBody input[type='checkbox']").prop("checked", this.checked)
+            })
             //按条件查询函数
             $("#getDataBtn").click(function () {
-                OnloadDataAll(1, $("#demo_pag1").bs_pagination('getOption', 'option_name', rowsPerPage))
+                OnloadDataAll(1, $("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'))
+            })
+            //刷新按钮
+            $("#resetAll").click(function () {
+                OnloadDataAll(1, $("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'))
             })
         });
 
@@ -361,7 +368,7 @@
                         class="glyphicon glyphicon-pencil"></span> 修改
                 </button>
                 <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
-                <button type="button" class="btn btn-primary" onclick="location.reload()">刷新
+                <button type="button" class="btn btn-primary" id="resetAll">刷新
                 </button>
             </div>
 
@@ -370,7 +377,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr style="color: #B3B3B3;">
-                    <td><input type="checkbox"/></td>
+                    <td><input type="checkbox" id="checkAll"/></td>
                     <td>名称</td>
                     <td>所有者</td>
                     <td>开始日期</td>
